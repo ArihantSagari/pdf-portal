@@ -67,6 +67,11 @@
     <scope>provided</scope>
 </dependency>
 
+<!-- PostgreSQL driver for Render (prod) -->
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+</dependency>
 
         <!-- Test -->
         <dependency>
