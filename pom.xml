@@ -40,6 +40,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+<!-- Flyway for DB migrations -->
+<dependency>
+  <groupId>org.flywaydb</groupId>
+  <artifactId>flyway-core</artifactId>
+  <version>9.22.0</version>
+</dependency>
 
         <!-- JPA + MySQL -->
         <dependency>
