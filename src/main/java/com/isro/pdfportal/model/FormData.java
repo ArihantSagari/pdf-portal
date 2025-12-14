@@ -1,10 +1,8 @@
 package com.isro.pdfportal.model;
 
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+
+
 public class FormData {
 
     // Fixed / prefilled from logged-in user

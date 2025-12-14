@@ -1,28 +1,28 @@
 package com.isro.pdfportal.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name = "users")
-@Getter
-@Setter
-@NoArgsConstructor
+@Table(
+    name = "users",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_users_email", columnNames = "email"),
+        @UniqueConstraint(name = "uk_users_staff_no", columnNames = "staff_no")
+    }
+)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "staff_no", nullable = false, unique = true, length = 50)
+    @Column(name = "staff_no", nullable = false, length = 50)
     private String staffNo;
 
     @Column(name = "full_name", nullable = false, length = 150)
     private String fullName;
 
-    @Column(nullable = false, unique = true, length = 150)
+    @Column(nullable = false, length = 150)
     private String email;
 
     @Column(nullable = false, length = 255)
@@ -38,92 +38,96 @@ public class User {
     private String phone;
 
     @Column(nullable = false, length = 20)
-    private String role = "USER";   // USER or ADMIN
+    private String role; // USER / ADMIN
 
     @Column(nullable = false)
-    private boolean active = true;
+    private boolean active;
 
-	public Long getId() {
-		return id;
-	}
+    /* -------------------- Defaults -------------------- */
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @PrePersist
+    protected void onCreate() {
+        if (this.role == null) {
+            this.role = "USER";
+        }
+        this.active = true;
+    }
 
-	public String getStaffNo() {
-		return staffNo;
-	}
+    /* -------------------- Getters & Setters -------------------- */
 
-	public void setStaffNo(String staffNo) {
-		this.staffNo = staffNo;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getFullName() {
-		return fullName;
-	}
+    public String getStaffNo() {
+        return staffNo;
+    }
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
+    public void setStaffNo(String staffNo) {
+        this.staffNo = staffNo;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getFullName() {
+        return fullName;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getDepartment() {
-		return department;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getDesignation() {
-		return designation;
-	}
+    public String getDepartment() {
+        return department;
+    }
 
-	public void setDesignation(String designation) {
-		this.designation = designation;
-	}
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public String getDesignation() {
+        return designation;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
 
-	public String getRole() {
-		return role;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public boolean isActive() {
-		return active;
-	}
+    public String getRole() {
+        return role;
+    }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-    
-    
-    
-    
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
