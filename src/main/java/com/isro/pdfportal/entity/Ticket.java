@@ -13,18 +13,14 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /* -------------------- RELATION -------------------- */
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    /* -------------------- DATA -------------------- */
 
     @Column(nullable = false, length = 150)
     private String title;
 
-    @Column(nullable = false, length = 2000)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -40,78 +36,71 @@ public class Ticket {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    /* -------------------- LIFECYCLE -------------------- */
+	public Long getId() {
+		return id;
+	}
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+	public User getUser() {
+		return user;
+	}
 
-    /* -------------------- GETTERS & SETTERS -------------------- */
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public TicketStatus getStatus() {
+		return status;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setStatus(TicketStatus status) {
+		this.status = status;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getPriority() {
+		return priority;
+	}
 
-    public TicketStatus getStatus() {
-        return status;
-    }
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
 
-    public void setStatus(TicketStatus status) {
-        this.status = status;
-    }
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
 
-    public String getPriority() {
-        return priority;
-    }
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
 
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    // getters & setters
+    
+    
 }
