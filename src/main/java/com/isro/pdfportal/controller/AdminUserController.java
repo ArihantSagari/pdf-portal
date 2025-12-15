@@ -3,7 +3,6 @@ package com.isro.pdfportal.controller;
 import com.isro.pdfportal.config.CustomUserDetails;
 import com.isro.pdfportal.entity.User;
 import com.isro.pdfportal.repository.UserRepository;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/users")
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminUserController {
 
     private final UserRepository userRepository;
@@ -20,18 +18,27 @@ public class AdminUserController {
         this.userRepository = userRepository;
     }
 
-    /* -------------------- LIST USERS -------------------- */
-
+    // List all users
     @GetMapping
-    public String listUsers(Model model) {
+    public String listUsers(Authentication authentication, Model model) {
+        if (authentication == null ||
+                !(authentication.getPrincipal() instanceof CustomUserDetails details)) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("users", userRepository.findAllByOrderByFullNameAsc());
         return "admin-users";
     }
 
-    /* -------------------- EDIT USER -------------------- */
-
+    // Show edit form
     @GetMapping("/edit/{id}")
-    public String editUser(@PathVariable Long id, Model model) {
+    public String editUser(@PathVariable Long id,
+                           Authentication authentication,
+                           Model model) {
+        if (authentication == null ||
+                !(authentication.getPrincipal() instanceof CustomUserDetails details)) {
+            return "redirect:/login";
+        }
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -40,8 +47,7 @@ public class AdminUserController {
         return "admin-user-edit";
     }
 
-    /* -------------------- UPDATE USER -------------------- */
-
+    // Handle save
     @PostMapping("/update")
     public String updateUser(@ModelAttribute("user") User formUser) {
 
@@ -57,7 +63,6 @@ public class AdminUserController {
         existing.setRole(formUser.getRole());
         existing.setActive(formUser.isActive());
 
-        // IMPORTANT: do NOT touch password here
         userRepository.save(existing);
 
         return "redirect:/admin/users";

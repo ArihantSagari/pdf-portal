@@ -22,6 +22,7 @@ public class DashboardController {
     private final PdfRecordService pdfRecordService;
     private final TicketService ticketService;
     private final UserRepository userRepository;
+    
 
     public DashboardController(PdfRecordService pdfRecordService,
                                TicketService ticketService,
@@ -35,7 +36,7 @@ public class DashboardController {
     public String userDashboard(Authentication authentication, Model model) {
 
         if (authentication == null ||
-            !(authentication.getPrincipal() instanceof CustomUserDetails details)) {
+                !(authentication.getPrincipal() instanceof CustomUserDetails details)) {
             return "redirect:/login";
         }
 
@@ -48,10 +49,8 @@ public class DashboardController {
         model.addAttribute("role", user.getRole());
 
         model.addAttribute("formTypes", Arrays.asList(FormType.values()));
-        model.addAttribute("recentPdfs",
-                pdfRecordService.getRecentRecords(user, 3));
-        model.addAttribute("myTickets",
-                ticketService.getUserTickets(user));
+        model.addAttribute("recentPdfs", pdfRecordService.getRecentRecords(user, 3));
+        model.addAttribute("myTickets", ticketService.getUserTickets(user)); 
 
         return "dashboard";
     }
@@ -60,7 +59,7 @@ public class DashboardController {
     public String adminDashboard(Authentication authentication, Model model) {
 
         if (authentication == null ||
-            !(authentication.getPrincipal() instanceof CustomUserDetails details)) {
+                !(authentication.getPrincipal() instanceof CustomUserDetails details)) {
             return "redirect:/login";
         }
 
@@ -68,16 +67,21 @@ public class DashboardController {
 
         model.addAttribute("fullName", admin.getFullName());
         model.addAttribute("staffNo", admin.getStaffNo());
+        model.addAttribute("department", admin.getDepartment());
 
-        model.addAttribute("totalUsers", userRepository.count());
-        model.addAttribute("activeUsers", userRepository.countByActive(true));
-        model.addAttribute("openTickets",
-                ticketService.countByStatus(TicketStatus.OPEN));
-        model.addAttribute("resolvedTickets",
+        long totalUsers = userRepository.count();
+        long activeUsers = userRepository.countByActive(true);
+        long openTickets = ticketService.countByStatus(TicketStatus.OPEN);
+        long resolvedTickets =
                 ticketService.countByStatus(TicketStatus.RESOLVED)
-              + ticketService.countByStatus(TicketStatus.CLOSED));
+              + ticketService.countByStatus(TicketStatus.CLOSED);
 
         List<Ticket> latestTickets = ticketService.getLatestTickets(10);
+
+        model.addAttribute("totalUsers", totalUsers);
+        model.addAttribute("activeUsers", activeUsers);
+        model.addAttribute("openTickets", openTickets);
+        model.addAttribute("resolvedTickets", resolvedTickets);
         model.addAttribute("latestTickets", latestTickets);
 
         return "admin-dashboard";

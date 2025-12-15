@@ -13,7 +13,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     List<Ticket> findAllByOrderByCreatedAtDesc();
 
-    List<Ticket> findTop10ByOrderByCreatedAtDesc();
-
     long countByStatus(TicketStatus status);
+
+    List<Ticket> findTop10ByOrderByCreatedAtDesc();
 }

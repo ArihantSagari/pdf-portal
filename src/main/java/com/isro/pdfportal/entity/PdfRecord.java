@@ -6,35 +6,33 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pdf_records")
+
 public class PdfRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "form_type", nullable = false, length = 100)
+
+
+    @Column(nullable = false, length = 100)
     private String formType;
 
-    @Column(name = "form_type_label", nullable = false, length = 200)
+    @Column(nullable = false, length = 200)
     private String formTypeLabel;
 
     @Column(nullable = false, length = 250)
     private String subject;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    /**
-     * IMPORTANT:
-     * bytea (not OID)
-     */
     @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "pdf_data", nullable = false, columnDefinition = "BYTEA")
+    @Column(nullable = false, columnDefinition = "LONGBLOB")
     private byte[] pdfData;
 
 	public Long getId() {
@@ -92,9 +90,6 @@ public class PdfRecord {
 	public void setPdfData(byte[] pdfData) {
 		this.pdfData = pdfData;
 	}
-
-    // getters & setters
-    
     
     
 }

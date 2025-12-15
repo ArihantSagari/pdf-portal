@@ -3,24 +3,27 @@ package com.isro.pdfportal.entity;
 import com.isro.pdfportal.model.TicketStatus;
 import jakarta.persistence.*;
 
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tickets")
+
 public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
 
     @Column(nullable = false, length = 150)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, length = 2000)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -28,13 +31,21 @@ public class Ticket {
     private TicketStatus status;
 
     @Column(nullable = false, length = 20)
-    private String priority;
+    private String priority; // e.g. LOW, MEDIUM, HIGH
 
-    @Column(name = "created_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
+    
+    
+
+
+
+	
+
+	
 
 	public Long getId() {
 		return id;
@@ -99,8 +110,6 @@ public class Ticket {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
-    // getters & setters
     
     
 }
